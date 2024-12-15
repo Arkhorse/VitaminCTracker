@@ -13,20 +13,16 @@ namespace VitaminCTracker.VitaminTracking
 		public VitaminTrackerBar() { }
 		public VitaminTrackerBar(IntPtr pointer) : base(pointer) { }
 
-		private GameObject ConditionBar;
-		private GameObject VitaminCObject;
-		private UILabel VitaminCLabel;
-
-		private string VitCAmount;
-		private string VitCRateLossDaily;
 		private bool PanelOpened;
 		private bool Logged;
+		public const string IconName = "ico_units_vitc";
 
 		public AssetBundle Bundle;
 		public GameObject VitaminCTrackerObject;
 		public GameObject Canvas;
 		public GameObject Panel;
-		public GameObject Root;
+		//public GameObject Root;
+		//public GameObject Icon;
 		public GameObject CleanBar;
 		public GameObject Values;
 		public GameObject Total;
@@ -86,11 +82,11 @@ namespace VitaminCTracker.VitaminTracking
 				Main.Logger.Log($"VitaminCTrackerObject is null", FlaggedLoggingLevel.Verbose);
 				return;
 			}
-			if (Root == null)
-			{
-				Main.Logger.Log($"Root is null", FlaggedLoggingLevel.Verbose);
-				return;
-			}
+			//if (Root == null)
+			//{
+			//	Main.Logger.Log($"Root is null", FlaggedLoggingLevel.Verbose);
+			//	return;
+			//}
 			if (CleanBar == null)
 			{
 				Main.Logger.Log($"CleanBar is null", FlaggedLoggingLevel.Verbose);
@@ -124,8 +120,9 @@ namespace VitaminCTracker.VitaminTracking
 			}
 
 			CleanBarController();
+			//IconController();
 			ValuesController();
-
+			
 			//PanelOpened = InterfaceManager.GetPanel<Panel_FirstAid>().enabled;
 			//if (PanelOpened && !Logged) OnPanelOpen();
 			//if (!PanelOpened && Logged) Logged = false;
@@ -144,38 +141,44 @@ namespace VitaminCTracker.VitaminTracking
 		//	//CleanBar.transform.localPosition = new Vector3(-300f, -450f, 0);
 		//}
 
-		public void OnPanelOpen()
-		{
-			if (Logged) return;
-			Main.Logger.Log($"VitaminTrackerBar.Update()", FlaggedLoggingLevel.Verbose);
-			Logged = true;
-			if (Il2CppTLD.Player.Nutrition.Instance == null)
-			{
-				Main.Logger.Log("[Il2CppTLD.Player.Nutrition.Instance] is null", FlaggedLoggingLevel.Verbose);
-			}
-			if (Il2CppTLD.Player.Nutrition.s_Instance == null)
-			{
-				Main.Logger.Log("[Il2CppTLD.Player.Nutrition.s_Instance] is null", FlaggedLoggingLevel.Verbose);
-			}
-			else if (Il2CppTLD.Player.Nutrition.s_Instance != null)
-			{
-				Main.Logger.Log("[Il2CppTLD.Player.Nutrition.s_Instance] is not null", FlaggedLoggingLevel.Verbose);
-			}
+		//public void OnPanelOpen()
+		//{
+		//	if (Logged) return;
+		//	Main.Logger.Log($"VitaminTrackerBar.Update()", FlaggedLoggingLevel.Verbose);
+		//	Logged = true;
 
-			float VitCNormalized = GameManager.GetScurvyComponent().GetVitaminCNormalized();
-			float Amounts = Il2CppTLD.Player.Nutrition.Instance.m_Amounts.Count;
+		//	var nutrition = Il2CppTLD.Player.Nutrition.Instance;
 
-			Main.Logger.Log($"Current: {VitCAmount} / 500 | Rate of Loss: {VitCRateLossDaily}/day | Normalized Current: {VitCNormalized}", FlaggedLoggingLevel.Verbose);
-			Main.Logger.Log($"Total number of float's in m_Amounts: {Amounts}", FlaggedLoggingLevel.Verbose);
+		//	if (nutrition == null)
+		//	{
+		//		Main.Logger.Log("[Il2CppTLD.Player.Nutrition.Instance] is null", FlaggedLoggingLevel.Verbose);
+		//		return;
+		//	}
+		//	if (Il2CppTLD.Player.Nutrition.s_Instance == null)
+		//	{
+		//		Main.Logger.Log("[Il2CppTLD.Player.Nutrition.s_Instance] is null", FlaggedLoggingLevel.Verbose);
+		//	}
+		//	else
+		//	{
+		//		Main.Logger.Log("[Il2CppTLD.Player.Nutrition.s_Instance] is not null", FlaggedLoggingLevel.Verbose);
+		//	}
 
-			if (Amounts > 1)
-			{
-				for (int i = 0; i < Il2CppTLD.Player.Nutrition.Instance.m_Amounts.Count; i++)
-				{
-					Main.Logger.Log($"\tEntry number {i} in m_Amounts: {Il2CppTLD.Player.Nutrition.Instance.m_Amounts[i]}", FlaggedLoggingLevel.Verbose);
-				}
-			}
-		}
+		//	float VitCNormalized = GameManager.GetScurvyComponent().GetVitaminCNormalized();
+		//	float Amounts = Il2CppTLD.Player.Nutrition.Instance.m_Amounts.Count;
+		//	float total = nutrition.m_Amounts[0];
+		//	float drain = nutrition.m_LossPerDay[0];
+
+		//	Main.Logger.Log($"Current: {total} / 500 | Rate of Loss: {drain}/day | Normalized Current: {VitCNormalized}", FlaggedLoggingLevel.Always);
+		//	Main.Logger.Log($"Total number of float's in m_Amounts: {Amounts}", FlaggedLoggingLevel.Always);
+
+		//	if (Amounts > 0)
+		//	{
+		//		for (int i = 0; i < Il2CppTLD.Player.Nutrition.Instance.m_Amounts.Count; i++)
+		//		{
+		//			Main.Logger.Log($"\tEntry number {i} in m_Amounts: {Il2CppTLD.Player.Nutrition.Instance.m_Amounts[i]}", FlaggedLoggingLevel.Verbose);
+		//		}
+		//	}
+		//}
 
 		public bool BuildUI()
 		{
@@ -194,13 +197,16 @@ namespace VitaminCTracker.VitaminTracking
 					// do it this way so I dont get confused about the damn child hierachy
 					Canvas = VitaminCTrackerObject.transform.GetChild(0).gameObject;
 					Panel = Canvas.transform.GetChild(0).gameObject;
-					Root = Panel.transform.GetChild(0).gameObject;
+					//Root = Panel.transform.GetChild(0).gameObject;
 
-					CleanBar = Root.transform.GetChild(0).gameObject;
+					CleanBar = Panel.transform.GetChild(0).gameObject;
 
-					Values = Root.transform.GetChild(1).gameObject;
+					Values = Panel.transform.GetChild(1).gameObject;
 					Total = Values.transform.GetChild(0).gameObject;
 					Drain = Values.transform.GetChild(1).gameObject;
+
+					//Icon = Root.transform.GetChild(2).gameObject;
+					//Icon.SetActive(false);
 				}
 				catch (Exception e)
 				{
@@ -215,10 +221,17 @@ namespace VitaminCTracker.VitaminTracking
 
 		public void SwapDirection(bool left)
 		{
-			var layout = Root.GetComponent<HorizontalLayoutGroup>();
+			var layout = Panel.GetComponent<HorizontalLayoutGroup>();
 			layout.m_ReverseArrangement = !left;
 		}
-
+		//public void IconController()
+		//{
+		//	UISprite sprite = new();
+		//	SetupUISprite(sprite, IconName);
+		//	var icon = sprite.mainTexture;
+		//	var s = Sprite.Create(icon as Texture2D, new Rect(0f, 0f, 24f, 24f), new(0.5f, 0.5f), 200f);
+		//	Icon.GetComponent<Image>().sprite = s;
+		//}
 		public void CleanBarController()
 		{
 			var bar = CleanBar.GetComponent<Slider>();
@@ -232,11 +245,40 @@ namespace VitaminCTracker.VitaminTracking
 
 		public void ValuesController()
 		{
-			var total = Total.GetComponent<TextMeshProUGUI>();
-			var drain = Drain.GetComponent<TextMeshProUGUI>();
+			TextMeshProUGUI total = new();
+			TextMeshProUGUI drain = new();
+
+			try
+			{
+				total = Total.GetComponent<TextMeshProUGUI>();
+				drain = Drain.GetComponent<TextMeshProUGUI>();
+			}
+			catch (Exception e)
+			{
+				Main.Logger.Log($"Attempting to get text components failed ", FlaggedLoggingLevel.Exception, e);
+				return;
+			}
 
 			total.SetText(Il2CppTLD.Player.Nutrition.Instance.m_Amounts[0].ToString("N2"));
 			drain.SetText($"{Il2CppTLD.Player.Nutrition.Instance.m_LossPerDay[0].ToString()}/Day");
+		}
+
+		public static void SetupUISprite(UISprite sprite, string spriteName)
+		{
+			UIAtlas baseAtlas = InterfaceManager.GetInstance().m_ScalableAtlases[0];
+			UISpriteData spriteData = baseAtlas.GetSprite(spriteName);
+
+			sprite.atlas = baseAtlas;
+			sprite.spriteName = spriteName;
+			sprite.mSprite = spriteData;
+			sprite.mSpriteSet = true;
+			//sprite.depth				= 30;
+			//sprite.alpha                = 1f;
+			//sprite.color                = Color.white;
+			//sprite.MakePixelPerfect();
+			//sprite.enabled              = true;
+
+			//sprite.MakePixelPerfect();
 		}
 	}
 }
