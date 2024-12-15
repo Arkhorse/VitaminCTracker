@@ -23,7 +23,7 @@ namespace VitaminCTracker
 		public const string Author                          = "The Illusion";
 		/// <summary>Current version</summary>
 		/// <value>This should always be <see href="https://semver.org">Semantic Versioning</see></value>
-		public const string Version                         = "1.1.0";
+		public const string Version                         = "1.1.1";
 		/// <summary>Name used on GUI's, like ModSettings</summary>
 		public const string GUIName                         = "Vitamin C Tracker";
 		/// <summary>The minimum Melon Loader version that your mod requires</summary>
